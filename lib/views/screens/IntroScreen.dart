@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intro_screen_onboarding_flutter/intro_app.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -76,7 +77,10 @@ class _IntroScreenState extends State<IntroScreen> {
                     imageUrl: 'assets/images/CloudIcon.png',
                   ),
                 ],
-                onTapSkipButton: () {
+                onTapSkipButton: () async {
+                  SharedPreferences pref =
+                      await SharedPreferences.getInstance();
+                  pref.setBool("isIntroVisited", true);
                   Navigator.of(context)
                       .pushNamedAndRemoveUntil('LoginPage', (route) => false);
                 },

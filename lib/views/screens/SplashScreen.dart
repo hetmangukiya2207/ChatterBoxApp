@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,9 +18,11 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
         const Duration(
           seconds: 3,
-        ), () {
+        ), () async {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      pref.setBool("isIntroVisited", true);
       Navigator.of(context)
-          .pushNamedAndRemoveUntil('IntroScreen', (route) => false);
+          .pushNamedAndRemoveUntil('LoginPage', (route) => false);
     });
   }
 

@@ -6,19 +6,14 @@ import 'package:chatterbox_app/views/screens/LoginPage.dart';
 import 'package:chatterbox_app/views/screens/SplashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  bool visited = pref.getBool("isIntroVisited") ?? false;
   runApp(
-    const MyApp(),
-  );
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
+    MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (context) => ConnectionProvider(),
@@ -36,7 +31,7 @@ class MyApp extends StatelessWidget {
             : ThemeData.dark(
                 useMaterial3: true,
               ),
-        initialRoute: 'SplashScreen',
+        initialRoute: (visited) ? 'SplashScreen' : 'IntroScreen',
         routes: {
           '/': (context) => const HomePage(),
           'SplashScreen': (context) => const SplashScreen(),
@@ -44,6 +39,6 @@ class MyApp extends StatelessWidget {
           'LoginPage': (context) => const LoginPage(),
         },
       ),
-    );
-  }
+    ),
+  );
 }
