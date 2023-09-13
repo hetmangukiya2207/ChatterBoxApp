@@ -2,6 +2,7 @@ import 'package:chatterbox_app/provider/ConnectionProvider.dart';
 import 'package:chatterbox_app/provider/ThemeProvider.dart';
 import 'package:chatterbox_app/views/screens/HomePage.dart';
 import 'package:chatterbox_app/views/screens/IntroScreen.dart';
+import 'package:chatterbox_app/views/screens/LoginPage.dart';
 import 'package:chatterbox_app/views/screens/SplashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
           '/': (context) => const HomePage(),
           'SplashScreen': (context) => const SplashScreen(),
           'IntroScreen': (context) => const IntroScreen(),
+          'LoginPage': (context) => const LoginPage(),
         },
       ),
     );
