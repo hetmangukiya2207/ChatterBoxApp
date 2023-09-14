@@ -24,8 +24,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final LoginPageKey = GlobalKey<FormState>();
-    TextEditingController MobileNumberController = TextEditingController();
     Size s = MediaQuery.of(context).size;
     double h = s.height;
     double w = s.width;
@@ -65,38 +63,6 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         height: h * 0.03,
                       ),
-                      CountryCodePicker(
-                        onChanged: print,
-                        initialSelection: 'IN',
-                        favorite: ['+91', 'IN'],
-                        showCountryOnly: false,
-                        showOnlyCountryWhenClosed: false,
-                        alignLeft: false,
-                      ),
-                      SizedBox(
-                        height: h * 0.03,
-                      ),
-                      Form(
-                        key: LoginPageKey,
-                        child: Column(
-                          children: <Widget>[
-                            TextFormField(
-                              controller: MobileNumberController,
-                              keyboardType: TextInputType.phone,
-                              decoration: const InputDecoration(
-                                labelText: 'Mobile Number',
-                                hintText: 'Enter your mobile number',
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please enter your mobile number';
-                                }
-                                return null;
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -117,18 +83,11 @@ class _LoginPageState extends State<LoginPage> {
                           .changeTheme();
                     },
                   ),
-                  middle: Text(
-                    "LoginPage",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                 ),
-                child: Text(
-                  "Disconnected",
-                  style: TextStyle(
-                    fontSize: h * 0.03,
-                    fontWeight: FontWeight.bold,
+                child: const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [],
                   ),
                 ),
               );
