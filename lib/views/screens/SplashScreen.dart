@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:chatterbox_app/views/utils/GlobalUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,16 +14,19 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  SharedPreference sharedPreference = SharedPreference();
   @override
   void initState() {
     Timer(
         const Duration(
           seconds: 3,
         ), () async {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      pref.setBool("isIntroVisited", true);
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('LoginPage', (route) => false);
+      bool? IsIntro = await sharedPreference.GetPrefrence();
+      (IsIntro == true)
+          ? Navigator.of(context)
+              .pushNamedAndRemoveUntil('LoginPage', (route) => false)
+          : Navigator.of(context)
+              .pushNamedAndRemoveUntil('IntroScreen', (route) => false);
     });
   }
 

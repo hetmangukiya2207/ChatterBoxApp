@@ -10,8 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences pref = await SharedPreferences.getInstance();
-  bool visited = pref.getBool("isIntroVisited") ?? false;
   runApp(
     MultiProvider(
       providers: [
@@ -31,7 +29,7 @@ void main() async {
             : ThemeData.dark(
                 useMaterial3: true,
               ),
-        initialRoute: (visited) ? 'SplashScreen' : 'IntroScreen',
+        initialRoute: 'SplashScreen',
         routes: {
           '/': (context) => const HomePage(),
           'SplashScreen': (context) => const SplashScreen(),

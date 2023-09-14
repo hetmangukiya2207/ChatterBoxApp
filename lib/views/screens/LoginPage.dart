@@ -113,11 +113,12 @@ class _LoginPageState extends State<LoginPage> {
                       CupertinoIcons.moon,
                     ),
                     onPressed: () {
-                      Provider.of<ThemeProvider>(context).changeTheme();
+                      Provider.of<ThemeProvider>(context, listen: false)
+                          .changeTheme();
                     },
                   ),
                   middle: Text(
-                    "IOS",
+                    "LoginPage",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),

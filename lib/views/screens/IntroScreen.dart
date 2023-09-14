@@ -1,3 +1,4 @@
+import 'package:chatterbox_app/views/utils/GlobalUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class IntroScreen extends StatefulWidget {
 class _IntroScreenState extends State<IntroScreen> {
   @override
   Widget build(BuildContext context) {
+    SharedPreference sharedPreference = SharedPreference();
     Size s = MediaQuery.of(context).size;
     double h = s.height;
     double w = s.width;
@@ -146,6 +148,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 ),
               ],
               onTapSkipButton: () {
+                sharedPreference.SetPrefrence();
                 Navigator.of(context)
                     .pushNamedAndRemoveUntil('LoginPage', (route) => false);
               },
