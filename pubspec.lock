@@ -73,14 +73,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.4"
-  country_code_picker:
-    dependency: "direct main"
-    description:
-      name: country_code_picker
-      sha256: "92818885f0e47486539f80463b66f649970506a91dd3c0731ca3ba5308324a4d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -169,11 +161,27 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.7.0"
+  firebase_phone_auth_handler:
+    dependency: "direct main"
+    description:
+      name: firebase_phone_auth_handler
+      sha256: "586e69d6a14eb1276634bbf73a1ede598e85e14e95ea887c67e6d9c62fb6e821"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.8"
   flutter:
     dependency: "direct main"
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_form_builder:
+    dependency: "direct main"
+    description:
+      name: flutter_form_builder
+      sha256: "8973beed34b6d951d36bf688b52e9e3040b47b763c35c320bd6f4c2f6b13f3a2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.1.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -200,6 +208,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.18.1"
+  intl_phone_field:
+    dependency: "direct main"
+    description:
+      name: intl_phone_field
+      sha256: "73819d3dfcb68d2c85663606f6842597c3ddf6688ac777f051b17814fe767bbf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.0"
   intro_screen_onboarding_flutter:
     dependency: "direct main"
     description:
@@ -487,4 +511,4 @@ packages:
     version: "6.3.0"
 sdks:
   dart: ">=3.1.0 <4.0.0"
-  flutter: ">=3.7.0"
+  flutter: ">=3.10.0"

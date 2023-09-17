@@ -41,7 +41,8 @@ dependencies:
   provider:
   intro_screen_onboarding_flutter:
   shared_preferences:
-  country_code_picker:
+  firebase_phone_auth_handler:
+  intl_phone_field:
 
 dev_dependencies:
   flutter_test:

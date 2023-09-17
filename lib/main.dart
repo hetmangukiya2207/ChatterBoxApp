@@ -6,9 +6,8 @@ import 'package:chatterbox_app/views/screens/LoginPage.dart';
 import 'package:chatterbox_app/views/screens/SplashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MultiProvider(

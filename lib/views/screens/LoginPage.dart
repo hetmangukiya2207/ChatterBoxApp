@@ -1,9 +1,9 @@
 import 'package:chatterbox_app/provider/ThemeProvider.dart';
 import 'package:chatterbox_app/views/component/NoInternetComponent.dart';
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/ConnectionProvider.dart';
@@ -27,6 +27,9 @@ class _LoginPageState extends State<LoginPage> {
     Size s = MediaQuery.of(context).size;
     double h = s.height;
     double w = s.width;
+    String countryCode = '+1';
+    GlobalKey<FormState> LoginPageKey = GlobalKey<FormState>();
+    TextEditingController PhoneNumberController = TextEditingController();
     return (defaultTargetPlatform == TargetPlatform.android)
         ? (Provider.of<ConnectionProvider>(context)
                     .connectivityModel
@@ -35,36 +38,66 @@ class _LoginPageState extends State<LoginPage> {
             ? const NoInternetAndroidComponent()
             : Scaffold(
                 body: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Your phone number",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: h * 0.02,
+                  child: Padding(
+                    padding: EdgeInsets.all(
+                      h * 0.02,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Your phone number",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: h * 0.02,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: h * 0.01,
-                      ),
-                      Text(
-                        "Please confirm you country code",
-                        style: TextStyle(
-                          fontSize: h * 0.016,
+                        SizedBox(
+                          height: h * 0.01,
                         ),
-                      ),
-                      Text(
-                        "and enter your phone number",
-                        style: TextStyle(
-                          fontSize: h * 0.016,
+                        Text(
+                          "Please confirm you country code",
+                          style: TextStyle(
+                            fontSize: h * 0.016,
+                            color: Colors.grey[600],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: h * 0.03,
-                      ),
-                    ],
+                        Text(
+                          "and enter your phone number",
+                          style: TextStyle(
+                            fontSize: h * 0.016,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        SizedBox(
+                          height: h * 0.03,
+                        ),
+                        IntlPhoneField(
+                          key: LoginPageKey,
+                          textInputAction: TextInputAction.done,
+                          invalidNumberMessage: "Enter Valid Phone Number",
+                          controller: PhoneNumberController,
+                          decoration: const InputDecoration(
+                            labelText: 'Phone number',
+                          ),
+                          initialCountryCode: countryCode,
+                          keyboardType: TextInputType.phone,
+                          showCursor: false,
+                        ),
+                      ],
+                    ),
                   ),
+                ),
+                floatingActionButton: FloatingActionButton(
+                  child: const Icon(
+                    Icons.arrow_forward,
+                  ),
+                  onPressed: () {
+                    if (LoginPageKey.currentState!.validate()) {
+                      String phoneNumber = PhoneNumberController.text;
+                      Navigator.of(context).pushNamed('OTPPage');
+                    }
+                  },
                 ),
               )
         : (Provider.of<ConnectionProvider>(context)
