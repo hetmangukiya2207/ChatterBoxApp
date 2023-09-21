@@ -1,59 +1,73 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+import 'FirestoreHelper.dart';
 
 class AuthHelper {
-  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  AuthHelper._();
 
-  // Verification ID
-  String? verificationId;
+  static AuthHelper auth_helper = AuthHelper._();
 
-  // Verify phone number
-  Future<void> verifyPhoneNumber(String phoneNumber) async {
-    PhoneAuthProvider phoneAuthProvider = PhoneAuthProvider();
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  GoogleSignIn googleSignIn = GoogleSignIn();
 
-    await firebaseAuth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: (phoneAuthCredential) async {
-        // Auto sign in the user with the phone auth credential
-        await firebaseAuth.signInWithCredential(phoneAuthCredential);
-      },
-      verificationFailed: (FirebaseAuthException error) {
-        FirebaseAuthException error = FirebaseAuthException(
-          code: 'FirebaseAuth/InvalidPhoneNumber',
-          message: 'Error Please try again after sometimes...',
-        );
-      },
-      codeSent: (String verificationId, int? resendToken) async {
-        // Store the verification ID for later use
-        this.verificationId = verificationId;
-      },
-      codeAutoRetrievalTimeout: (String verificationId) async {
-        this.verificationId = verificationId;
-      },
-    );
+  Future<User?> SigninAnonymous() async {
+    UserCredential userCredential = await firebaseAuth.signInAnonymously();
+    return userCredential.user;
   }
 
-  // Sign in with phone number
-  Future<UserCredential> signInWithPhoneNumber(String verificationCode) async {
-    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
-      verificationId: verificationId!,
-      smsCode: verificationCode,
-    );
-
-    // Sign in the user with the phone auth credential
+  Future<User?> SignUp(
+      {required String email, required String password}) async {
     UserCredential userCredential =
-        await firebaseAuth.signInWithCredential(phoneAuthCredential);
-
-    // Return the user credential
-    return userCredential;
+        await firebaseAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return userCredential.user;
   }
 
-  // Sign out
-  Future<void> signOut() async {
+  Future<Map<String, dynamic>> SignIn(
+      {required String email, required String password}) async {
+    Map<String, dynamic> res = {};
+    try {
+      UserCredential userCredential = await firebaseAuth
+          .signInWithEmailAndPassword(email: email, password: password);
+      FirestoreHelper.fireStore_Helper.addUser(data: {
+        "email": userCredential.user?.email,
+        "uid": userCredential.user?.uid,
+      });
+      res['user'] = userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      res['error'] = e.code;
+    }
+    return res;
+  }
+
+  // SigninWith Google
+  Future<User?> signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    var credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    UserCredential userCredential =
+        await firebaseAuth.signInWithCredential(credential);
+
+    User? user = userCredential.user;
+    FirestoreHelper.fireStore_Helper.addUser(data: {
+      "email": user?.email,
+      "uid": user?.uid,
+    });
+    return user;
+  }
+
+  void SignOut() async {
     await firebaseAuth.signOut();
-  }
-
-  // Get the current user
-  User? getCurrentUser() {
-    return firebaseAuth.currentUser;
+    await googleSignIn.signOut();
   }
 }

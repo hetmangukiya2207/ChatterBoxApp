@@ -36,6 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons:
   connectivity_plus:
+  google_sign_in:
   firebase_auth:
   firebase_core:
   provider:
@@ -43,6 +44,7 @@ dependencies:
   shared_preferences:
   firebase_phone_auth_handler:
   intl_phone_field:
+  cloud_firestore:
 
 dev_dependencies:
   flutter_test:
