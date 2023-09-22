@@ -25,15 +25,25 @@ class _IntroScreenState extends State<IntroScreen> {
               body: IntroScreenOnboarding(
                 introductionList: [
                   Introduction(
+                    imageHeight: h * 0.35,
                     title: 'Telegram',
                     subTitleTextStyle: TextStyle(
                       fontSize: h * 0.022,
                     ),
                     subTitle:
                         "The world's fastest messaging app. it is free and secure.",
+                    titleTextStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: h * 0.03,
+                    ),
                     imageUrl: 'assets/images/AppLogo.png',
                   ),
                   Introduction(
+                    titleTextStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: h * 0.03,
+                    ),
+                    imageHeight: h * 0.35,
                     title: 'Fast',
                     subTitleTextStyle: TextStyle(
                       fontSize: h * 0.022,
@@ -43,6 +53,11 @@ class _IntroScreenState extends State<IntroScreen> {
                     imageUrl: 'assets/images/FastIcon.png',
                   ),
                   Introduction(
+                    titleTextStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: h * 0.03,
+                    ),
+                    imageHeight: h * 0.35,
                     title: 'Free',
                     subTitleTextStyle: TextStyle(
                       fontSize: h * 0.022,
@@ -52,6 +67,11 @@ class _IntroScreenState extends State<IntroScreen> {
                     imageUrl: 'assets/images/GiftIcon.png',
                   ),
                   Introduction(
+                    titleTextStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: h * 0.03,
+                    ),
+                    imageHeight: h * 0.35,
                     title: 'Powerful',
                     subTitleTextStyle: TextStyle(
                       fontSize: h * 0.022,
@@ -61,6 +81,11 @@ class _IntroScreenState extends State<IntroScreen> {
                     imageUrl: 'assets/images/PowerfulIcon.png',
                   ),
                   Introduction(
+                    titleTextStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: h * 0.03,
+                    ),
+                    imageHeight: h * 0.35,
                     title: 'Secure',
                     subTitleTextStyle: TextStyle(
                       fontSize: h * 0.022,
@@ -70,6 +95,11 @@ class _IntroScreenState extends State<IntroScreen> {
                     imageUrl: 'assets/images/SecureIcon.png',
                   ),
                   Introduction(
+                    titleTextStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: h * 0.03,
+                    ),
+                    imageHeight: h * 0.35,
                     title: 'Cloud-Based',
                     subTitleTextStyle: TextStyle(
                       fontSize: h * 0.022,
@@ -84,7 +114,7 @@ class _IntroScreenState extends State<IntroScreen> {
                       await SharedPreferences.getInstance();
                   pref.setBool("isIntroVisited", true);
                   Navigator.of(context)
-                      .pushNamedAndRemoveUntil('LoginPage', (route) => false);
+                      .pushNamedAndRemoveUntil('WelcomePage', (route) => false);
                 },
               ),
             ),
