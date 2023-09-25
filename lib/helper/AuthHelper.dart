@@ -18,7 +18,9 @@ class AuthHelper {
   }
 
   Future<User?> SignUp(
-      {required String email, required String password}) async {
+      {required String email,
+      required String password,
+      required String username}) async {
     UserCredential userCredential =
         await firebaseAuth.createUserWithEmailAndPassword(
       email: email,

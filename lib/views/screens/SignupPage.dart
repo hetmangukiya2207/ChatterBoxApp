@@ -46,13 +46,39 @@ class _SignupPageState extends State<SignupPage> {
                     .connectivityStatus ==
                 "waiting")
             ? const NoInternetAndroidComponent()
-            : SafeArea(
-                child: Scaffold(
-                  body: Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(
-                        h * 0.02,
-                      ),
+            : Scaffold(
+                appBar: AppBar(
+                  leading: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back,
+                    ),
+                  ),
+                  actions: [
+                    IconButton(
+                      onPressed: () {
+                        Provider.of<ThemeProvider>(context, listen: false)
+                            .changeTheme();
+                      },
+                      icon: Provider.of<ThemeProvider>(context).isDarkView
+                          ? const Icon(
+                              Icons.dark_mode,
+                            )
+                          : const Icon(
+                              Icons.sunny,
+                            ),
+                    ),
+                  ],
+                ),
+                body: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(
+                      h * 0.02,
+                    ),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -251,6 +277,7 @@ class _SignupPageState extends State<SignupPage> {
                                 onPressed: () {
                                   if (signupKey.currentState!.validate()) {
                                     AuthHelper.auth_helper.SignUp(
+                                      username: SignUpNameController.text,
                                       email: SignUpEmailController.text,
                                       password:
                                           SignUpConfirmPasswordController.text,
@@ -258,6 +285,13 @@ class _SignupPageState extends State<SignupPage> {
                                     Navigator.of(context)
                                         .pushNamedAndRemoveUntil(
                                             '/', (route) => false);
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                            Text("Something went Wrong..."),
+                                      ),
+                                    );
                                   }
                                 },
                                 child: const Text(
@@ -272,19 +306,32 @@ class _SignupPageState extends State<SignupPage> {
                           SizedBox(
                             height: h * 0.02,
                           ),
-                          const Text.rich(
-                            TextSpan(
-                              text: "Don’t have an Account ? ",
-                              children: [
-                                TextSpan(
-                                  text: "Sign in",
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Don't Have an Account ?",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: h * 0.02,
+                                ),
+                              ),
+                              SizedBox(
+                                width: w * 0.022,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pushNamed('LoginPage');
+                                },
+                                child: Text(
+                                  "Sign In",
                                   style: TextStyle(
-                                    color: Colors.black,
                                     fontWeight: FontWeight.bold,
+                                    fontSize: h * 0.02,
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                           SizedBox(
                             height: h * 0.02,
@@ -308,11 +355,19 @@ class _SignupPageState extends State<SignupPage> {
                                   } else {}
                                 },
                                 child: SvgPicture.asset(
+                                  color: Provider.of<ThemeProvider>(context)
+                                          .isDarkView
+                                      ? Colors.white
+                                      : Colors.black,
                                   "assets/icons/facebook.svg",
                                   height: h * 0.03,
                                 ),
                               ),
                               SvgPicture.asset(
+                                color: Provider.of<ThemeProvider>(context)
+                                        .isDarkView
+                                    ? Colors.white
+                                    : Colors.black,
                                 "assets/icons/twitter.svg",
                                 height: h * 0.03,
                               ),
@@ -327,6 +382,10 @@ class _SignupPageState extends State<SignupPage> {
                                   } else {}
                                 },
                                 child: SvgPicture.asset(
+                                  color: Provider.of<ThemeProvider>(context)
+                                          .isDarkView
+                                      ? Colors.white
+                                      : Colors.black,
                                   "assets/icons/google-plus.svg",
                                   height: h * 0.03,
                                 ),

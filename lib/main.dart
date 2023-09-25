@@ -1,3 +1,4 @@
+import 'package:chatterbox_app/firebase_options.dart';
 import 'package:chatterbox_app/provider/ConnectionProvider.dart';
 import 'package:chatterbox_app/provider/ThemeProvider.dart';
 import 'package:chatterbox_app/views/screens/HomePage.dart';
@@ -6,11 +7,15 @@ import 'package:chatterbox_app/views/screens/LoginPage.dart';
 import 'package:chatterbox_app/views/screens/SignupPage.dart';
 import 'package:chatterbox_app/views/screens/SplashScreen.dart';
 import 'package:chatterbox_app/views/screens/WelcomePage.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.android,
+  );
   runApp(
     MultiProvider(
       providers: [

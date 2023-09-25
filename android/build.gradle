@@ -8,8 +8,6 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
-        implementation 'com.facebook.android:facebook-android-sdk:8.x'
     }
 }
 

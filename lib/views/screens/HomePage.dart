@@ -1,10 +1,15 @@
+import 'package:chatterbox_app/helper/FirestoreHelper.dart';
 import 'package:chatterbox_app/provider/ThemeProvider.dart';
+import 'package:chatterbox_app/views/component/NoInternetComponent.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../helper/AuthHelper.dart';
 import '../../provider/ConnectionProvider.dart';
+import '../utils/Global.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,67 +30,133 @@ class _HomePageState extends State<HomePage> {
     Size s = MediaQuery.of(context).size;
     double h = s.height;
     double w = s.width;
+    GlobalKey<ScaffoldState> ScaffoldKey = GlobalKey<ScaffoldState>();
     return (defaultTargetPlatform == TargetPlatform.android)
         ? (Provider.of<ConnectionProvider>(context)
                     .connectivityModel
                     .connectivityStatus ==
                 "waiting")
-            ? Scaffold(
-                appBar: AppBar(
-                  actions: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.dark_mode_outlined,
-                      ),
+            ? const NoInternetAndroidComponent()
+            : WillPopScope(
+                onWillPop: () async {
+                  return await showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text("Are You Sure.."),
+                      content: Text("Do you Want to Exit..."),
+                      actions: [
+                        ElevatedButton(onPressed: () {}, child: Text("Yes")),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text("No"),
+                        ),
+                      ],
                     ),
-                  ],
-                  title: const Text(
-                    "Android",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                  );
+                },
+                child: Scaffold(
+                  key: ScaffoldKey,
+                  drawer: Drawer(
+                    width: 300,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 50,
+                        ),
+                        CircleAvatar(
+                          radius: 80,
+                          foregroundImage: NetworkImage(
+                              "${AuthHelper.auth_helper.firebaseAuth.currentUser?.photoURL}"),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                            "${AuthHelper.auth_helper.firebaseAuth.currentUser?.email?.split("@")[0]}"),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Divider(),
+                        Text(
+                            "${AuthHelper.auth_helper.firebaseAuth.currentUser?.email}"),
+                        Divider(),
+                      ],
                     ),
                   ),
-                  centerTitle: true,
-                ),
-                body: Center(
-                  child: Text(
-                    "Disconnected",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: h * 0.03,
-                    ),
-                  ),
-                ),
-              )
-            : Scaffold(
-                appBar: AppBar(
-                  actions: [
-                    IconButton(
-                      onPressed: () {
-                        Provider.of<ThemeProvider>(context, listen: false)
-                            .changeTheme();
+                  appBar: AppBar(
+                    title: Text(
+                        "Welcome ${AuthHelper.auth_helper.firebaseAuth.currentUser?.email?.split("@")[0]}"),
+                    leading: GestureDetector(
+                      onTap: () {
+                        ScaffoldKey.currentState?.openDrawer();
                       },
-                      icon: const Icon(
-                        Icons.dark_mode_outlined,
+                      child: CircleAvatar(
+                        foregroundImage: NetworkImage(
+                            "${AuthHelper.auth_helper.firebaseAuth.currentUser?.photoURL}"),
                       ),
                     ),
-                  ],
-                  title: const Text(
-                    "Android",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    actions: [
+                      IconButton(
+                          onPressed: () {
+                            AuthHelper.auth_helper.SignOut();
+                            Navigator.pushReplacementNamed(
+                                context, "WelcomePage");
+                          },
+                          icon: Icon(Icons.power_settings_new))
+                    ],
                   ),
-                  centerTitle: true,
-                ),
-                body: Center(
-                  child: Text(
-                    "Connected",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: h * 0.03,
-                    ),
+                  body: StreamBuilder(
+                    stream: FirestoreHelper.fireStore_Helper.fetchUsers(),
+                    builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text("${snapshot.error}"),
+                        );
+                      } else if (snapshot.hasData) {
+                        QuerySnapshot<Map<String, dynamic>> my_data =
+                            snapshot.data;
+                        List<QueryDocumentSnapshot<Map<String, dynamic>>> data =
+                            (my_data == null) ? [] : my_data.docs;
+
+                        return ListView.builder(
+                            itemCount: data.length,
+                            itemBuilder: (ctx, i) {
+                              return Card(
+                                child: ListTile(
+                                  onTap: () async {
+                                    Navigator.pushNamed(context, "chat",
+                                        arguments: <String>[
+                                          AuthHelper.auth_helper.firebaseAuth
+                                              .currentUser!.uid,
+                                          data[i]['uid'],
+                                          data[i]['email']
+                                        ]);
+                                    all_stream_messages = await FirestoreHelper
+                                        .fireStore_Helper
+                                        .DisplayMessage(
+                                            uid1: AuthHelper.auth_helper
+                                                .firebaseAuth.currentUser!.uid,
+                                            uid2: data[i]['uid']);
+                                  },
+                                  title: Text("${data[i]['email']}"),
+                                  subtitle: Text("${data[i]['uid']}"),
+                                  trailing: IconButton(
+                                    onPressed: () async {
+                                      await FirestoreHelper.fireStore_Helper
+                                          .deleteUser(uid: data[i]['uid']);
+                                    },
+                                    icon: Icon(Icons.delete),
+                                  ),
+                                ),
+                              );
+                            });
+                      }
+                      return Center(
+                        child: LinearProgressIndicator(),
+                      );
+                    },
                   ),
                 ),
               )
@@ -93,32 +164,7 @@ class _HomePageState extends State<HomePage> {
                     .connectivityModel
                     .connectivityStatus ==
                 "waiting")
-            ? CupertinoPageScaffold(
-                navigationBar: CupertinoNavigationBar(
-                  trailing: CupertinoButton(
-                    child: const Icon(
-                      CupertinoIcons.moon,
-                    ),
-                    onPressed: () {
-                      Provider.of<ThemeProvider>(context, listen: false)
-                          .changeTheme();
-                    },
-                  ),
-                  middle: Text(
-                    "IOS",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                child: Text(
-                  "Connected",
-                  style: TextStyle(
-                    fontSize: h * 0.03,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              )
+            ? const NoInternetIosComponent()
             : CupertinoPageScaffold(
                 navigationBar: CupertinoNavigationBar(
                   trailing: CupertinoButton(
