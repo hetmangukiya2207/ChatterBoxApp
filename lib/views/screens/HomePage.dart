@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                           onPressed: () {
                             AuthHelper.auth_helper.SignOut();
                             Navigator.pushReplacementNamed(
-                                context, "WelcomePage");
+                                context, "WelcomePagadd .");
                           },
                           icon: Icon(Icons.power_settings_new))
                     ],
