@@ -1,7 +1,7 @@
 import 'dart:developer';
-
-import 'package:chatterbox_app/helper/AuthHelper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'AuthHelper.dart';
 
 class FirestoreHelper {
   //TODO: Private Constructor

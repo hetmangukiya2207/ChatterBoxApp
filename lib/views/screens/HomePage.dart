@@ -86,8 +86,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   appBar: AppBar(
-                    title: Text(
-                        "Welcome ${AuthHelper.auth_helper.firebaseAuth.currentUser?.email?.split("@")[0]}"),
+                    title: Text("Chatter Box"),
+                    centerTitle: true,
                     leading: GestureDetector(
                       onTap: () {
                         ScaffoldKey.currentState?.openDrawer();
@@ -99,12 +99,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                     actions: [
                       IconButton(
-                          onPressed: () {
-                            AuthHelper.auth_helper.SignOut();
-                            Navigator.pushReplacementNamed(
-                                context, "WelcomePagadd .");
-                          },
-                          icon: Icon(Icons.power_settings_new))
+                        onPressed: () {
+                          AuthHelper.auth_helper.SignOut();
+                          Navigator.pushReplacementNamed(
+                              context, "WelcomePage");
+                        },
+                        icon: const Icon(
+                          Icons.power_settings_new,
+                        ),
+                      ),
                     ],
                   ),
                   body: StreamBuilder(
@@ -126,13 +129,15 @@ class _HomePageState extends State<HomePage> {
                               return Card(
                                 child: ListTile(
                                   onTap: () async {
-                                    Navigator.pushNamed(context, "chat",
-                                        arguments: <String>[
-                                          AuthHelper.auth_helper.firebaseAuth
-                                              .currentUser!.uid,
-                                          data[i]['uid'],
-                                          data[i]['email']
-                                        ]);
+                                    Navigator.of(context).pushNamed(
+                                      'ChatPage',
+                                      arguments: <String>[
+                                        AuthHelper.auth_helper.firebaseAuth
+                                            .currentUser!.uid,
+                                        // data[i]['uid'],
+                                        data[i]['email']
+                                      ],
+                                    );
                                     all_stream_messages = await FirestoreHelper
                                         .fireStore_Helper
                                         .DisplayMessage(
